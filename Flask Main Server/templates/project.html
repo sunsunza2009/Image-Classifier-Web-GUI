@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>AI Tool</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
-    <style type="text/css">
-    	@import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,400italic");
-	    .event-list{list-style:none;font-family:'Lato',sans-serif;margin:0;padding:0}
+	<meta charset="UTF-8">
+	<title>AI Tool</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+	<style type="text/css">
+		@import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,400italic");
+		.event-list{list-style:none;font-family:'Lato',sans-serif;margin:0;padding:0}
 		.event-list > li{background-color:#fff;box-shadow:0 0 5px #333;box-shadow:0 0 5px rgba(51,51,51,0.7);padding:0;margin:0 0 20px}
 		.event-list > li > .time{display:inline-block;width:100%;color:#fff;background-color:#c52c66;padding:5px;text-align:center;text-transform:uppercase}
 		.event-list > li:nth-child(even) > .time{background-color:#a552a7}
@@ -21,77 +21,98 @@
 		.event-list > li .time > .month{display:block;font-size:24pt;font-weight:900;line-height:1}
 		.event-list > li > img{width:100%}
 		.event-list > li > .info{padding-top:5px;text-align:center}
-		.event-list > li > .info > .title{padding-left:5px;font-size:17pt;font-weight:700;margin:0}
-		.event-list > li > .info > .desc {padding-left:5px;font-size: 13pt;font-weight: 300;margin: 0px;}
+		.event-list > li > .info > .title{font-size:17pt;font-weight:700;margin:0}
+		.event-list > li > .info > .desc {font-size: 13pt;font-weight: 300;margin: 0px;}
 		.event-list > li > .info > ul,.event-list > li > .social > ul{display:table;list-style:none;margin:10px 0 0;padding:0;width:100%;text-align:center}
 		.event-list > li > .social > ul{margin:0}
 		.event-list > li > .info > ul > li,.event-list > li > .social > ul > li{display:table-cell;cursor:pointer;color:#1e1e1e;font-size:11pt;font-weight:300;padding:3px 0}
 		.event-list > li > .info > ul > li > a{display:block;width:100%;color:#1e1e1e;text-decoration:none}
 		.event-list > li > .social > ul > li{padding:0}
 		.event-list > li > .social > ul > li > a{padding:3px 0}
-		.event-list > li > .info > ul > li:hover,.event-list > li > .social > ul > li:hover{color:#1e1e1e;background-color:#c8c8c8}		
+		.event-list > li > .info > ul > li:hover,.event-list > li > .social > ul > li:hover{color:#1e1e1e;background-color:#c8c8c8}
+		.event-list > li > .info > ul > li {background-color: rgba(158, 158, 158, 0.225);}
+		.progress {background-color: rgba(158, 158, 158, 0.25)}
 		@media (min-width: 768px) {
 			.event-list > li{position:relative;display:block;width:100%;height:120px;padding:0}
 			.event-list > li > .time,.event-list > li > img{display:inline-block;width:120px;float:left}
 			.event-list > li > .info{background-color:#f5f5f5;overflow:hidden}
 			.event-list > li > .time,.event-list > li > img{width:120px;height:120px;padding:0;margin:0}
-			.event-list > li > .info{position:relative;height:120px;text-align:left;padding-right:40px}
+			.event-list > li > .info{position:relative;height:120px;text-align:center;}
 			.event-list > li > .info > ul{position:absolute;left:0;bottom:0}
 			.event-list > li > .social{position:absolute;top:0;right:0;display:block;width:40px}
 			.event-list > li > .social > ul{border-left:1px solid #e6e6e6}
 			.event-list > li > .social > ul > li{display:block;padding:0}
 			.event-list > li > .social > ul > li > a{display:block;width:40px;padding:10px 0 9px}
 		}
-    </style>
+	</style>
 </head>
 
 <body class="bg-light">
-    <!-- Start NAV BAR -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
-        <a class="navbar-brand" href="#"><i class="fas fa-brain"></i></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-            <div class="btn-group">
-                <button type="button" class="btn btn-transparent" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">                   
-                    <i class="fas fa-user text-white"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-right">
-                    <h6 class="dropdown-header">Welcome {{sess.username}}</h6>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{url_for('AUTH.logout')}}" class="dropdown-item" type="button">Logout</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- End NAV BAR -->
-    <div class="container-fluid">
-	    <!--{% for row in proj %}
+	<!-- Start NAV BAR -->
+	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
+		<a class="navbar-brand" href="#"><i class="fas fa-brain"></i></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
+				</li>
+			</ul>
+			<div class="btn-group">
+				<button type="button" class="btn btn-transparent" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">                   
+					<i class="fas fa-user text-white"></i>
+				</button>
+				<div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-right">
+					<h6 class="dropdown-header">Welcome {{sess.username}}</h6>
+					<div class="dropdown-divider"></div>
+					<a href="{{url_for('AUTH.logout')}}" class="dropdown-item" type="button">Logout</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<!-- End NAV BAR -->
+	<div class="container-fluid">
+		<!--{% for row in proj %}
 		<tr>
 			<td> {{ row.proj_name }}</td>
 			<td> {{ row.proj_modelPath }}</td>
 		</tr>
 		{% endfor %}-->
-		<div class="row justify-content-center pt-5">
+		<div class="row justify-content-center pt-3">
 			<div class="col-xs-12 col-sm-offset-2 col-sm-8">
+				<div class="mb-4 border-bottom">
+					<h1>My Project
+						<button type="button" class="btn btn-outline-success float-right mt-2">New</button>
+						<div class="form-inline float-right mt-2 mr-sm-2">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-outline-danger" id="clr">Clear</button>
+						</div>
+						
+					</h1>
+				</div> 
 				<ul class="event-list">
 					<li>
 						<div class="time pt-2">
 							<span class="day">4</span>
 							<span class="month">Jul</span>
 						</div>
-						<img alt="Independence Day" src="https://farm4.staticflickr.com/3100/2693171833_3545fb852c_q.jpg" />
 						<div class="info">
 							<h2 class="title">Independence Day</h2>
-							<p class="desc">PS Vita</p>
-							<p class="desc">PS Vita</p>
-						</div>						
+							<div class="desc">
+								<label>Image</label>
+								<div class="progress ml-3 mr-3">
+									<div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">
+										<span>100/500</span>
+									</div>
+								</div>
+							</div>
+							<ul>
+								<li style="width:50%;"><a href="#enter"><span class="fas fa-sign-in-alt"></span> Enter Project</a></li>
+								<li style="width:50%;"><a href="#delete"><span class="fas fa-trash-alt"></span> Delete Project</a></li>
+							</ul>
+						</div>
 					</li>
 
 					<li>
@@ -101,13 +122,19 @@
 						</div>
 						<div class="info">
 							<h2 class="title">One Piece Unlimited World Red</h2>
-							<p class="desc">PS Vita</p>
-							<p class="desc">PS Vita</p>
+							<div class="desc">
+								<label>Image</label>
+								<div class="progress ml-3 mr-3">
+									<div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
+										<span>100/500</span>
+									</div>
+								</div>
+							</div>
 							<ul>
-								<li style="width:50%;"><a href="#website"><span class="fa fa-globe"></span> Website</a></li>
-								<li style="width:50%;"><span class="fa fa-money"></span> $39.99</li>
+								<li style="width:50%;"><a href="#enter"><span class="fas fa-sign-in-alt"></span> Enter Project</a></li>
+								<li style="width:50%;"><a href="#delete"><span class="fas fa-trash-alt"></span> Delete Project</a></li>
 							</ul>
-						</div>					
+						</div>
 					</li>
 
 					<li>
@@ -115,17 +142,21 @@
 							<span class="day">20</span>
 							<span class="month">Jan</span>
 						</div>
-						<img alt="My 24th Birthday!" src="https://farm5.staticflickr.com/4150/5045502202_1d867c8a41_q.jpg" />
 						<div class="info">
 							<h2 class="title">Mouse0270's 24th Birthday!</h2>
-							<p class="desc">PS Vita</p>
-							<p class="desc">PS Vita</p>
+							<div class="desc">
+								<label>Image</label>
+								<div class="progress ml-3 mr-3">
+									<div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+										<span>100/500</span>
+									</div>
+								</div>
+							</div>
 							<ul>
-								<li style="width:33%;">1 <span class="glyphicon glyphicon-ok"></span></li>
-								<li style="width:34%;">3 <span class="fa fa-question"></span></li>
-								<li style="width:33%;">103 <span class="fa fa-envelope"></span></li>
+								<li style="width:50%;"><a href="#enter"><span class="fas fa-sign-in-alt"></span> Enter Project</a></li>
+								<li style="width:50%;"><a href="#delete"><span class="fas fa-trash-alt"></span> Delete Project</a></li>
 							</ul>
-						</div>						
+						</div>
 					</li>
 
 					<li>
@@ -133,22 +164,46 @@
 							<span class="day">31</span>
 							<span class="month">Jan</span>
 						</div>
-						<img alt="Disney Junior Live On Tour!" src="https://imperfectlycourtneyhome.files.wordpress.com/2014/01/DL13_PiratePrincess_thumb.jpg" />
 						<div class="info">
 							<h2 class="title">Disney Junior Live On Tour!</h2>
-							<p class="desc">PS Vita</p>
-							<p class="desc">PS Vita</p>
+							<div class="desc">
+								<label>Image</label>
+								<div class="progress ml-3 mr-3">
+									<div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+										<span>100/500</span>
+									</div>
+								</div>
+							</div>
 							<ul>
-								<li style="width:33%;">$49.99 <span class="fa fa-male"></span></li>
-								<li style="width:34%;">$29.99 <span class="fa fa-child"></span></li>
+								<li style="width:50%;"><a href="#enter"><span class="fas fa-sign-in-alt"></span> Enter Project</a></li>
+								<li style="width:50%;"><a href="#delete"><span class="fas fa-trash-alt"></span> Delete Project</a></li>
 							</ul>
-						</div>				
-					</li>
+						</div>
+					</li>						
 				</ul>
 			</div>
 		</div>
-    </div>
+	</div>
 </body>
 <script type="text/javascript">
+	$("input[type='search']").bind("keyup",function() {
+		var searchString = $(this).val();
+		console.log(searchString);
+		$(".event-list > li").each(function(index, value) {		    
+		    console.log(value);
+		    currentName = $(value).text()
+		    if( currentName.toUpperCase().indexOf(searchString.toUpperCase()) > -1) {
+		       $(value).show();
+		    } else {
+		        $(value).hide();
+		    }		    
+		});
+	});
+	$("#clr").click(function(){
+		$("input[type='search']").val("");
+		$(".event-list > li").each(function(index, value) {		    		  
+		    $(value).show();		  	   
+		});
+	});
 </script>
 </html>
