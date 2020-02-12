@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>AI Tool</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+	<style type="text/css">
+		.nav>li>a:focus,.nav>li>a:hover{background:transparent!important}
+		.design-process-section .text-align-center{line-height:25px;margin-bottom:12px}
+		.design-process-content{border:1px solid #e9e9e9;background-color: #FFFFFF;position:relative;padding:10px}
+		/* .design-process-content img{position:absolute;top:0;right:0;bottom:0;z-index:0;max-height:100%} */
+		.design-process-content h3{margin-bottom:16px}
+		.design-process-content p{line-height:26px;margin-bottom:12px}
+		.process-model{list-style:none;padding:0;position:relative;max-width:700px;margin:20px auto 26px;border:none;z-index:0}
+		.process-model li::after{background:#e5e5e5 none repeat scroll 0 0;bottom:0;content:"";display:block;height:4px;margin:0 auto;position:absolute;right:15%;top:30%;width:80%;z-index:-1}
+		.process-model li.visited::after{background:#4caf50}
+		.process-model li:last-child::after{width:0}
+		.process-model li{display:inline-block;width:18%;text-align:center;float:none}
+		.nav-tabs.process-model > li.active > a,.nav-tabs.process-model > li.active > a:hover,.nav-tabs.process-model > li.active > a:focus,.process-model li a:hover,.process-model li a:focus{border:none;background:transparent}
+		.process-model li a{padding:0;border:none;color:#606060}
+		.process-model li.active,.process-model li.visited{color:#4caf50}
+		.process-model li.active a,.process-model li.active a:hover,.process-model li.active a:focus,.process-model li.visited a,.process-model li.visited a:hover,.process-model li.visited a:focus{color:#4caf50}
+		.process-model li.active p,.process-model li.visited p{font-weight:600;color:#4caf50}
+		.process-model li i{display:block;height:68px;width:68px;text-align:center;margin:0 auto;background:#f5f6f7;border:2px solid #e5e5e5;line-height:65px;font-size:30px;border-radius:50%}
+		.process-model li.active i,.process-model li.visited i{background:#fff;border-color:#4caf50}
+		.process-model li p{font-size:14px;margin-top:11px}
+		.process-model.contact-us-tab li.visited a,.process-model.contact-us-tab li.visited p{color:#606060!important;font-weight:400}
+		.process-model.contact-us-tab li::after{display:none}
+		.process-model.contact-us-tab li.visited i{border-color:#e5e5e5}
+		@media screen and (max-width: 560px) {
+			.more-icon-preocess.process-model li span{font-size:23px;height:50px;line-height:46px;width:50px}
+			.more-icon-preocess.process-model li::after{top:24px}
+		}
+		@media screen and (max-width: 380px) {
+			.process-model.more-icon-preocess li{width:16%}
+			.more-icon-preocess.process-model li span{font-size:16px;height:35px;line-height:32px;width:35px}
+			.more-icon-preocess.process-model li p{font-size:8px}
+			.more-icon-preocess.process-model li::after{top:18px}
+			.process-model.more-icon-preocess{text-align:center}
+		}
+		.file-upload{background-color:#fff;width:90%;margin:0 auto;padding:20px}
+		.file-upload-btn{width:100%;margin:0;color:#fff;background:#1FB264;border:none;padding:10px;border-radius:4px;border-bottom:4px solid #15824B;transition:all .2s ease;outline:none;text-transform:uppercase;font-weight:700}
+		.file-upload-btn:hover{background:#1AA059;color:#fff;transition:all .2s ease;cursor:pointer}
+		.file-upload-btn:active{border:0;transition:all .2s ease}
+		.file-upload-content{display:none;text-align:center}
+		.file-upload-input{position:absolute;margin:0;padding:0;width:100%;height:100%;outline:none;opacity:0;cursor:pointer}
+		.image-upload-wrap{margin-top:20px;border:4px dashed #1FB264;position:relative}
+		.image-dropping,.image-upload-wrap:hover{background-color:#1FB264;border:4px dashed #fff}
+		.image-title-wrap{padding:0 15px 15px;color:#222}
+		.drag-text{text-align:center}
+		.drag-text h3{font-weight:100;text-transform:uppercase;color:#15824B;padding:60px 0}
+		.file-upload-image{max-height:200px;max-width:200px;margin:auto;padding:20px}
+		.remove-image{width:200px;margin:0;color:#fff;background:#cd4535;border:none;padding:10px;border-radius:4px;border-bottom:4px solid #b02818;transition:all .2s ease;outline:none;text-transform:uppercase;font-weight:700}
+		.remove-image:hover{background:#c13b2a;color:#fff;transition:all .2s ease;cursor:pointer}
+		.remove-image:active{border:0;transition:all .2s ease}
+	</style>
+</head>
+
+<body class="bg-light">
+	<!-- Start NAV BAR -->
+	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
+		<a class="navbar-brand" href="#"><i class="fas fa-brain"></i></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
+				</li>
+			</ul>
+			<div class="btn-group">
+				<button type="button" class="btn btn-transparent" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">                   
+					<i class="fas fa-user text-white"></i>
+				</button>
+				<div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-right">
+					<h6 class="dropdown-header">Welcome {{sess.username}}</h6>
+					<div class="dropdown-divider"></div>
+					<a href="{{url_for('AUTH.logout')}}" class="dropdown-item" type="button">Logout</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<!-- End NAV BAR -->
+	<div class="container-fluid">
+		<div class="row justify-content-center pt-3">
+			<div class="col-xs-12 col-sm-offset-2 col-sm-8">
+				<div class="mb-4 border-bottom">
+					<h1>{{name}}
+						<!-- <button type="button" class="btn btn-outline-success float-right mt-2">New</button>
+						<div class="form-inline float-right mt-2 mr-sm-2">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-outline-danger" id="clr">Clear</button>
+						</div>  -->				
+					</h1>
+				</div> 
+				<div class="row">
+					<div class="col"> 
+				        <!-- design process steps--> 
+				        <!-- Nav tabs -->
+				        <ul class="nav nav-tabs process-model more-icon-preocess" role="tablist">
+							<li role="presentation" class="active">
+								<a href="#discover" aria-controls="discover" role="tab" data-toggle="tab">
+									<i class="fas fa-file-upload" aria-hidden="true"></i>
+									<p>Upload Image</p>
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#strategy" aria-controls="strategy" role="tab" data-toggle="tab">
+									<i class="fas fa-image" aria-hidden="true"></i>
+									<p>Annotation</p>
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#optimization" aria-controls="optimization" role="tab" data-toggle="tab">
+									<i class="fas fa-database" aria-hidden="true"></i>
+									<p>Dataset</p>
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#content" aria-controls="content" role="tab" data-toggle="tab">
+									<i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+									<p>Training</p>
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#reporting" aria-controls="reporting" role="tab" data-toggle="tab">
+									<i class="fas fa-brain" aria-hidden="true"></i>
+									<p>Model</p>
+								</a>
+							</li>
+				        </ul>
+				        <!-- end design process steps--> 
+				        <!-- Tab panes -->
+				        <div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="discover">
+								<div class="design-process-content">
+									<h3 class="semi-bold">Upload Image</h3>								
+									<div class="file-upload">
+										<button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+
+										<div class="image-upload-wrap">
+											<input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+											<div class="drag-text">
+												<h3>Drag and drop a file or select add Image</h3>
+											</div>
+										</div>
+										<div class="file-upload-content">
+											<img class="file-upload-image" src="#" alt="your image" />
+											<div class="image-title-wrap">
+											 	<button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="strategy">
+								<div class="design-process-content">
+									<h3 class="semi-bold">Annotation</h3>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="optimization">
+								<div class="design-process-content">
+									<h3 class="semi-bold">Dataset</h3>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="content">
+								<div class="design-process-content">
+									<h3 class="semi-bold">Training</h3>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>              
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="reporting">
+								<div class="design-process-content">
+									<h3 class="semi-bold">Model</h3>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat. </p>
+								</div>
+							</div>
+				      	</div>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		var href = $(e.target).attr('href');
+		var $curr = $(".process-model  a[href='" + href + "']").parent();
+		$('.process-model li').removeClass();
+		$curr.addClass("active");
+		$curr.prevAll().addClass("visited");
+	});
+
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				//$('.image-upload-wrap').hide();
+				$('.file-upload-image').attr('src', e.target.result);
+				$('.file-upload-content').show();
+				$('.image-title').html(input.files[0].name);
+			};
+			reader.readAsDataURL(input.files[0]);
+		} else {
+			removeUpload();
+		}
+	}
+
+	function removeUpload() {
+		$('.file-upload-input').replaceWith($('.file-upload-input').clone());
+		$('.file-upload-content').hide();
+		$('.image-upload-wrap').show();
+	}
+
+	$('.image-upload-wrap').bind('dragover', function () {
+		$('.image-upload-wrap').addClass('image-dropping');
+	});
+	$('.image-upload-wrap').bind('dragleave', function () {
+		$('.image-upload-wrap').removeClass('image-dropping');
+	});
+</script>
+</html>
