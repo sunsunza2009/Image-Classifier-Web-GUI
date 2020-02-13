@@ -14,9 +14,17 @@ app.register_blueprint(campus.api,url_prefix="/api/campus")
 app.register_blueprint(building.api,url_prefix="/api/building")
 app.register_blueprint(room.api,url_prefix="/api/room")'''
 
+def checkuser():
+	sess_user = db.getUser(session["username"])
+	if(not sess_user or (sess_user and sess_user["api_key"] != session['key'])):
+		session.pop('username', None)
+		session.pop('key', None)
+		return redirect(url_for('AUTH.login'))
+
 @app.route("/")
 def index():
-	if 'username' in session:		
+	if 'username' in session:
+		checkuser()
 		proj = db.list_project(session["id"])
 		return render_template('project.html',sess=session, proj=proj)
 	return redirect(url_for('AUTH.login'))

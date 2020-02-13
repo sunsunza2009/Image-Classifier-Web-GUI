@@ -81,6 +81,7 @@
 				</button>
 				<div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-right">
 					<h6 class="dropdown-header">Welcome {{sess.username}}</h6>
+					<h6 class="dropdown-header">Api Key: {{sess.key}}</h6>
 					<div class="dropdown-divider"></div>
 					<a href="{{url_for('AUTH.logout')}}" class="dropdown-item" type="button">Logout</a>
 				</div>

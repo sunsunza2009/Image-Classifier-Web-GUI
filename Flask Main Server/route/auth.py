@@ -12,10 +12,11 @@ def login():
 	if request.method == 'POST':
 		username = request.form['username']
 		pwd = request.form['password']	
-		res, usr_id = db.login(username,pwd)	
+		res, usr_id, apikey = db.login(username,pwd)	
 		if(res):
 			session['username'] = username
 			session['id'] = usr_id
+			session['key'] = apikey
 			return redirect(url_for('index'))
 		else:
 			return render_template("login.html",user=username)
@@ -44,4 +45,5 @@ def logout():
 	# remove the username from the session if it's there
 	session.pop('id', None)
 	session.pop('username', None)
+	session.pop('key', None)
 	return redirect(url_for('index'))

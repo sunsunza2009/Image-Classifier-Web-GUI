@@ -11,18 +11,22 @@ class Database:
 								   DictCursor,autocommit=True)
 		self.cur = self.con.cursor()
 
+	def getUser(self,query):
+		self.cur.execute("SELECT * FROM user WHERE (username=%s or email=%s)",(query,query))
+		return self.cur.fetchone()
+
 	def login(self,user,password):
 		self.cur.execute("SELECT * FROM user WHERE username=%s or email=%s",(user,user))
 		result = self.cur.fetchone()
 		try:
 			if result and pbkdf2_sha256.verify(password, result["password"]):
-				return True, result["id"]
+				return True, result["id"], result["api_key"]
 			else:
-				return False, -1
+				return False, -1, -1
 		except:
-			return False, -1
+			return False, -1, -1
 
-	def register(self,user,email,password):  
+	def register(self,user,email,password):
 		self.cur.execute("SELECT * FROM user WHERE (username=%s or email=%s) or (username=%s or email=%s)",(user,user,email,email))
 		result = self.cur.fetchone()
 		if result:
@@ -30,7 +34,7 @@ class Database:
 
 		try:
 			password = pbkdf2_sha256.using(rounds=8000, salt_size=10).hash(password)
-			self.cur.execute("INSERT INTO `user` (`username`,`email`, `password`) VALUES (%s, %s, %s)", (user,email, password))
+			self.cur.execute("INSERT INTO `user` (`username`,`email`, `password`, `api_key`) VALUES (%s, %s, %s, uuid())", (user,email, password))
 			return True
 		except:
 			return False
@@ -42,5 +46,6 @@ class Database:
 
 if __name__ == '__main__':
 	db = Database()
-	print(db.register("admin","admin@.com","test"))
+	print(db.getUser("admin"))
+	print(db.register("admin","admin@.com","admin"))
 	print(db.login("admin","admin"))
