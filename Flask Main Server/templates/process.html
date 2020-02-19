@@ -10,6 +10,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
 	<style type="text/css">
 		.nav>li>a:focus,.nav>li>a:hover{background:transparent!important}
 		.design-process-section .text-align-center{line-height:25px;margin-bottom:12px}
@@ -59,6 +60,38 @@
 		.remove-image{width:200px;margin:0;color:#fff;background:#cd4535;border:none;padding:10px;border-radius:4px;border-bottom:4px solid #b02818;transition:all .2s ease;outline:none;text-transform:uppercase;font-weight:700}
 		.remove-image:hover{background:#c13b2a;color:#fff;transition:all .2s ease;cursor:pointer}
 		.remove-image:active{border:0;transition:all .2s ease}
+		
+		.editor{color:#D4D4D4;font-family:'Roboto Condensed',sans-serif}
+		.title{text-align:center}
+		.heart{color:#F75549}
+		.inputModule{margin:10%}
+		#main-wrap h1{font-size:20px}
+		#main-wrap h2{font-size:15px}
+		#main-wrap p{font-size:13px}
+		canvas{background:gray;height:100%;width:100%}
+		#colorTools{display:inline;font-size:20px;margin-left:15px}
+		#main-wrap i{cursor:pointer}
+		#sidebar input[type="text"]{display:block;outline:none;border:none;background:#777;color:#D4D4D4;font-family:'Roboto Condensed',sans-serif}
+		#sidebar button{margin-top:5px;border:none;background:#777;color:#D4D4D4;font-family:'Roboto Condensed',sans-serif}
+		#sidebar button:focus{outline-color:#fff}
+		#sidebar input[type="range"]{-webkit-appearance:none!important;height:2px;background:#333;outline:none}
+		#sidebar input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none!important;width:15px;height:15px;background:#D4D4D4}
+		#sidebar input[type="color"]{margin-top:5px;border:none;background:none;outline:none;width:30px;height:30px}
+		#main-wrap label{display:block;text-selection:none;user-select:none;font-size:15px}
+		#main-wrap{background:grey;height:85vh}
+		#sidebar{background-color:#444;height:100vh}
+		#content-wrap{background-color:#333;height:100%}
+		/*#main-wrap > div{min-height:450px}*/
+		#main-wrap{overflow:hidden}
+		#sidebar{float:left;width:25%;min-width:100px;max-width:235px}
+		#content-wrap{float:left;width:75%}
+		::selection{background:#ffbdb7}
+		.list-group{
+			max-height: 100px;
+			margin-bottom: 10px;
+			overflow:scroll;
+			-webkit-overflow-scrolling: touch;
+		}
 	</style>
 </head>
 
@@ -164,7 +197,53 @@
 							<div role="tabpanel" class="tab-pane" id="strategy">
 								<div class="design-process-content">
 									<h3 class="semi-bold">Annotation</h3>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>
+									<div id="main-wrap" class="editor">
+										<div id="sidebar">											
+											<div class="inputModule">
+												<label>Image</label>
+												<div class="row">
+													<div class="col">
+														<img class="img-thumbnail bg-success border-success"src="https://images.pexels.com/photos/853168/pexels-photo-853168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+													</div>
+													<div class="col">
+														<img class="img-thumbnail"src="https://images.pexels.com/photos/305070/pexels-photo-305070.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+													</div>
+												</div>		
+												<button type="button">Back</button>
+												<button type="button">Next</button>
+											</div>
+											
+											<div class="inputModule">
+												<label>Class <i class="fas fa-circle"></i></label>
+												<select class="form-control">
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+												</select>
+												<button type="button">Auto</button>
+											</div>
+										
+											<div class="inputModule">
+												<label>Zoom
+													<input id="scaler" oninput="scaleFactor.value=value" type="range" min="1" max="100" value="50">
+													<output id="scaleFactor">50</output>												
+												</label>
+												<button type="button" id="load">Reset zoom</button>
+											</div>
+										
+											<div class="inputModule">
+												<label>Mode</label>
+												<button type="button"><i class="fas fa-draw-polygon"></i> Draw ROI</button>
+												<button type="button"><i class="fas fa-arrows-alt"></i> Move ROI</button>
+												<button type="button"><i class="fas fa-arrows-alt"></i> Move Board</button>
+											</div>
+										</div>
+									  
+										<div id="content-wrap">
+											<canvas id="c"></canvas>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="optimization">
