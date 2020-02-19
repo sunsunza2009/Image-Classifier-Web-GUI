@@ -67,13 +67,11 @@
 		#main-wrap h1{font-size:20px}
 		#main-wrap h2{font-size:15px}
 		#main-wrap p{font-size:13px}
-		canvas{background:gray;height:100%;width:100%}
 		#colorTools{display:inline;font-size:20px;margin-left:15px}
-		#main-wrap i{cursor:pointer}
 		#sidebar input[type="text"]{display:block;outline:none;border:none;background:#777;color:#D4D4D4;font-family:'Roboto Condensed',sans-serif}
 		#sidebar button{margin-top:5px;border:none;background:#777;color:#D4D4D4;font-family:'Roboto Condensed',sans-serif}
 		#sidebar button:focus{outline-color:#fff}
-		#sidebar input[type="range"]{-webkit-appearance:none!important;height:2px;background:#333;outline:none}
+		#sidebar input[type="range"]{-webkit-appearance:none!important;height:2px;background:#333;outline:none;cursor:pointer}
 		#sidebar input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none!important;width:15px;height:15px;background:#D4D4D4}
 		#sidebar input[type="color"]{margin-top:5px;border:none;background:none;outline:none;width:30px;height:30px}
 		#main-wrap label{display:block;text-selection:none;user-select:none;font-size:15px}
@@ -85,6 +83,11 @@
 		#sidebar{float:left;width:25%;min-width:100px;max-width:235px}
 		#content-wrap{float:left;width:75%}
 		::selection{background:#ffbdb7}
+		#canvasContainer {
+			width: 100%;
+			height: 100%;
+			background-color: gray;
+		}
 	</style>
 </head>
 
@@ -139,7 +142,7 @@
 								</a>
 							</li>
 							<li role="presentation">
-								<a href="#strategy" aria-controls="strategy" role="tab" data-toggle="tab">
+								<a href="#strategy" aria-controls="strategy" role="tab" data-toggle="tab" onclick="setTimeout(setSize, 100)">
 									<i class="fas fa-image" aria-hidden="true"></i>
 									<p>Annotation</p>
 								</a>
@@ -219,22 +222,22 @@
 										
 											<div class="inputModule">
 												<label>Zoom
-													<input id="scaler" oninput="scaleFactor.value=value" type="range" min="1" max="100" value="50">
-													<output id="scaleFactor">50</output>												
+													<input id="scaler" oninput="scaleFactor.value=value" type="range" step='.1' max='2' min='0.1' value="1" onchange='setZoom(this.value)'>
+													<output id="scaleFactor">1</output>
 												</label>
-												<button type="button" id="load">Reset zoom</button>
+												<button type="button" id="btnResetZoom">Reset zoom</button>
 											</div>
 										
 											<div class="inputModule">
 												<label>Mode</label>
-												<button type="button"><i class="fas fa-draw-polygon"></i> Draw ROI</button>
-												<button type="button"><i class="fas fa-arrows-alt"></i> Move ROI</button>
+												<button type="button" id="draw"><i class="fas fa-draw-polygon"></i> Draw ROI</button>
+												<button type="button" id="select"><i class="fas fa-arrows-alt"></i> Move ROI</button>
 												<button type="button"><i class="fas fa-arrows-alt"></i> Move Board</button>
 											</div>
 										</div>
 									  
 										<div id="content-wrap">
-											<canvas id="c"></canvas>
+											<canvas id="imgAnno"></canvas>
 										</div>
 									</div>
 								</div>
@@ -264,6 +267,7 @@
 		</div>
 	</div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
 <script type="text/javascript">
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		var href = $(e.target).attr('href');
@@ -300,5 +304,116 @@
 	$('.image-upload-wrap').bind('dragleave', function () {
 		$('.image-upload-wrap').removeClass('image-dropping');
 	});
+	
+var canvas = new fabric.Canvas('imgAnno',{preserveObjectStacking:true});
+canvas.backgroundColor = 'grey';
+
+$( window ).resize(function() {
+	setSize();
+});
+
+function setSize(){
+	let containerSize = {
+	  width: document.getElementById('content-wrap').offsetWidth,
+	  height: document.getElementById('content-wrap').offsetHeight
+	};
+	console.log(containerSize);
+	canvas.setWidth(containerSize.width);
+	canvas.setHeight(containerSize.height);
+	resetZoom();
+}
+
+var isDown = false;
+var text = new fabric.Textbox('1. Text inside canvas', {
+    left: 100,
+    top: 50,
+    width: 300,
+    fill: 'white',
+    selectable: true
+});
+
+canvas.add(text);
+
+$("#btnResetZoom").click(function() {	
+    resetZoom();
+});
+
+function setZoom(newZoomLevel) {
+  zoomLevel = newZoomLevel;
+  canvas.setZoom(zoomLevel);
+}
+
+function resetZoom() {
+	$("#scaler").val("1")
+	$("#scaleFactor").val("1")
+    canvas.setZoom(1);
+    canvas.renderAll();
+}
+$("#select").click(function() {
+    canvas.selection = true;
+    canvas.off('mouse:down');
+    canvas.off('mouse:move');
+    canvas.off('mouse:up');
+    changeSelectableStatus(true);
+});
+
+$("#draw").click(function() {
+    canvas.selection = false;
+    canvas.on('mouse:down', onMouseDown);
+    canvas.on('mouse:move', onMouseMove);
+    canvas.on('mouse:up', onMouseUp);
+    changeSelectableStatus(false);
+});
+
+function changeSelectableStatus(val) {
+    canvas.forEachObject(function(obj) {
+        obj.selectable = val;
+    })
+    canvas.renderAll();
+}
+
+function onMouseDown(o) {
+    var pointer = canvas.getPointer(o.e);
+    isDown = true;
+    origX = pointer.x;
+    origY = pointer.y;
+
+    rectangle = new fabric.Rect({
+        left: origX,
+        top: origY,
+        fill: 'transparent',
+        stroke: 'red',
+        strokeWidth: 3,
+        selectable: false
+    });
+    canvas.add(rectangle);
+}
+
+function onMouseMove(o) {
+    if (!isDown) return;
+    var pointer = canvas.getPointer(o.e);
+    if (origX > pointer.x) {
+        rectangle.set({
+            left: Math.abs(pointer.x)
+        });
+    }
+    if (origY > pointer.y) {
+        rectangle.set({
+            top: Math.abs(pointer.y)
+        });
+    }
+    rectangle.set({
+        width: Math.abs(origX - pointer.x)
+    });
+    rectangle.set({
+        height: Math.abs(origY - pointer.y)
+    });
+    canvas.renderAll();
+};
+
+function onMouseUp(o) {
+    rectangle.setCoords();
+    isDown = false;
+};
 </script>
 </html>
