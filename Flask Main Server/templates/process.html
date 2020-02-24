@@ -83,11 +83,6 @@
 		#sidebar{float:left;width:25%;min-width:100px;max-width:235px}
 		#content-wrap{float:left;width:75%}
 		::selection{background:#ffbdb7}
-		#canvasContainer {
-			width: 100%;
-			height: 100%;
-			background-color: gray;
-		}
 	</style>
 </head>
 
@@ -105,7 +100,7 @@
 				</li>
 			</ul>
 			<div class="btn-group">
-				<button type="button" class="btn btn-transparent" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">                   
+				<button type="button" class="btn btn-transparent" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
 					<i class="fas fa-user text-white"></i>
 				</button>
 				<div class="dropdown-menu dropdown-menu-left dropdown-menu-lg-right">
@@ -127,7 +122,7 @@
 						<div class="form-inline float-right mt-2 mr-sm-2">
 							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
 							<button class="btn btn-outline-danger" id="clr">Clear</button>
-						</div>  -->				
+						</div>  -->
 					</h1>
 				</div> 
 				<div class="row">
@@ -176,15 +171,21 @@
 										<button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
 
 										<div class="image-upload-wrap">
-											<input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+											<input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" multiple/>
 											<div class="drag-text">
 												<h3>Drag and drop a file or select add Image</h3>
 											</div>
 										</div>
-										<div class="file-upload-content">
-											<img class="file-upload-image" src="#" alt="your image" />
-											<div class="image-title-wrap">
-											 	<button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+										<div class="file-upload-content pt-3">
+											<div class="row" id="gallery">												
+												<!--<div class="col-lg-3 col-md-4 col-sm-6">
+													<div class="card">
+														<img class="card-img-top" src="https://dummyimage.com/160x120/000000/fff.png&text=Photo+1">
+														<div class="card-body">
+															<div class="card-text">Image.jpg<button type="button" class="btn btn-outline-danger float-right"><i class="fa fa-times"></i></button></div>															
+														</div>
+													</div>												
+												</div>-->
 											</div>
 										</div>
 									</div>
@@ -194,7 +195,7 @@
 								<div class="design-process-content">
 									<h3 class="semi-bold">Annotation</h3>
 									<div id="main-wrap" class="editor">
-										<div id="sidebar">											
+										<div id="sidebar">
 											<div class="inputModule">
 												<label>Image</label>
 												<div class="row">
@@ -204,7 +205,7 @@
 													<div class="col">
 														<img class="img-thumbnail"src="https://images.pexels.com/photos/305070/pexels-photo-305070.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
 													</div>
-												</div>		
+												</div>
 												<button type="button">Back</button>
 												<button type="button">Next</button>
 											</div>
@@ -219,7 +220,7 @@
 												</select>
 												<button type="button">Auto</button>
 											</div>
-										
+
 											<div class="inputModule">
 												<label>Zoom
 													<input id="scaler" oninput="scaleFactor.value=value" type="range" step='.1' max='2' min='0.1' value="1" onchange='setZoom(this.value)'>
@@ -230,12 +231,12 @@
 										
 											<div class="inputModule">
 												<label>Mode</label>
+												<button type="button" id="selectboard"><i class="fas fa-arrows-alt"></i> Move Board</button>
 												<button type="button" id="draw"><i class="fas fa-draw-polygon"></i> Draw ROI</button>
 												<button type="button" id="select"><i class="fas fa-arrows-alt"></i> Move ROI</button>
-												<button type="button"><i class="fas fa-arrows-alt"></i> Move Board</button>
 											</div>
 										</div>
-									  
+
 										<div id="content-wrap">
 											<canvas id="imgAnno"></canvas>
 										</div>
@@ -245,19 +246,55 @@
 							<div role="tabpanel" class="tab-pane" id="optimization">
 								<div class="design-process-content">
 									<h3 class="semi-bold">Dataset</h3>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>
+									<div class="dataset">
+										<div class="card">
+											<ul class="list-group list-group-flush">
+												<li class="list-group-item">Last Update <h4>1/1/2020</h4></li>
+												<li class="list-group-item">Image <h4>10/100</h4></li>
+											</ul>
+										</div>
+										<div class="row pt-3">
+											<div class="col">
+												<button type="button" class="btn btn-primary">Make Dataset</button>
+												<button type="button" class="btn btn-primary" disabled>Download Dataset</button>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="content">
 								<div class="design-process-content">
 									<h3 class="semi-bold">Training</h3>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat</p>              
+									<div class="training">
+										<div class="card">
+											<ul class="list-group list-group-flush">
+												<li class="list-group-item">Last Update <h4>1/1/2020</h4></li>
+												<li class="list-group-item">Image <h4>10/100</h4></li>
+											</ul>
+										</div>
+										<div class="row pt-3">
+											<div class="col">
+												<button type="button" class="btn btn-primary">Training</button>
+												<button type="button" class="btn btn-primary" disabled>Download Model</button>
+												<button type="button" class="btn btn-primary" disabled>Deploy Here</button>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="reporting">
 								<div class="design-process-content">
 									<h3 class="semi-bold">Model</h3>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid unt ut laoreet dolore magna aliquam erat volutpat. </p>
+									<div class="training">
+										<div class="card">
+											<ul class="list-group list-group-flush">
+												<li class="list-group-item">URL <h4>http://localhost/api/public/model/0001/predict</h4></li>
+												<li class="list-group-item">POST Data <h4>Image File</h4></li>
+												<li class="list-group-item">Respond <h4>JSON</h4></li>
+												<li class="list-group-item">API Key <h4>ABCDEFG012345</h4></li>												
+											</ul>
+										</div>										
+									</div>
 								</div>
 							</div>
 				      	</div>
@@ -279,14 +316,18 @@
 
 	function readURL(input) {
 		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				//$('.image-upload-wrap').hide();
-				$('.file-upload-image').attr('src', e.target.result);
-				$('.file-upload-content').show();
-				$('.image-title').html(input.files[0].name);
-			};
-			reader.readAsDataURL(input.files[0]);
+			for(i of input.files){
+				var reader = new FileReader();
+				reader.fileName = i.name;
+				reader.onload = function(e) {
+					$('#gallery').append('<div class="col-lg-3 col-md-4 col-sm-6 pt-2"><div class="card"><img class="card-img-top" src="'+e.target.result+'">\
+										<div class="card-body">\
+											<div class="card-text">'+e.target.fileName+'<button type="button" class="btn btn-outline-danger float-right"><i class="fa fa-times"></i></button></div>\
+										</div></div></div>');
+					$('.file-upload-content').show();
+				};
+				reader.readAsDataURL(i);
+			}			
 		} else {
 			removeUpload();
 		}
@@ -306,55 +347,82 @@
 	});
 	
 var canvas = new fabric.Canvas('imgAnno',{preserveObjectStacking:true});
+var multiply = fabric.util.multiplyTransformMatrices;
+var invert = fabric.util.invertTransform;
 canvas.backgroundColor = 'grey';
+var boss;
+var Img;
+var islock = true;
 
-$( window ).resize(function() {
+function loadImage(url) {
+	Img = new Image();
+	Img.onload = function() {
+		boss = new fabric.Image( Img, { top: 0, left:0, lockUniScaling: true, objType: "Image" } );
+		boss.hasControls = false;
+		boss.hasBorders = false;
+		boss.lockMovementX = true;
+		boss.lockMovementY = true;
+		console.log(boss);
+		boss.scaleToWidth(canvas.width*0.9);
+		console.log(boss);
+		canvas.clear();
+		canvas.backgroundColor = 'grey';
+		resetZoom();
+		canvas.add(boss);
+		canvas.renderAll();
+		InitMinions();
+	};
+	Img.src = url;
+}
+
+$(document).ready(function(){
+    loadImage("https://images.pexels.com/photos/853168/pexels-photo-853168.jpeg");
+});
+
+$(window).resize(function() {
 	setSize();
 });
 
 function setSize(){
 	let containerSize = {
-	  width: document.getElementById('content-wrap').offsetWidth,
-	  height: document.getElementById('content-wrap').offsetHeight
+		width: document.getElementById('content-wrap').offsetWidth,
+		height: document.getElementById('content-wrap').offsetHeight
 	};
-	console.log(containerSize);
 	canvas.setWidth(containerSize.width);
 	canvas.setHeight(containerSize.height);
-	resetZoom();
+	//resetZoom();
+	//boss.scaleToWidth(canvas.width*0.9);
 }
 
 var isDown = false;
-var text = new fabric.Textbox('1. Text inside canvas', {
-    left: 100,
-    top: 50,
-    width: 300,
-    fill: 'white',
-    selectable: true
-});
 
-canvas.add(text);
-
-$("#btnResetZoom").click(function() {	
+$("#btnResetZoom").click(function() {
     resetZoom();
 });
 
 function setZoom(newZoomLevel) {
-  zoomLevel = newZoomLevel;
-  canvas.setZoom(zoomLevel);
+	$("#scaler").val(newZoomLevel);
+	$("#scaleFactor").html(Math.round(newZoomLevel * 10) / 10);
+	canvas.setZoom(newZoomLevel);
 }
 
 function resetZoom() {
 	$("#scaler").val("1")
 	$("#scaleFactor").val("1")
     canvas.setZoom(1);
+	canvas.viewportTransform[4] = 0;
+	canvas.viewportTransform[5] = 0;
     canvas.renderAll();
 }
+
 $("#select").click(function() {
     canvas.selection = true;
     canvas.off('mouse:down');
-    canvas.off('mouse:move');
+    canvas.off('mouse:move', onMouseMove);
     canvas.off('mouse:up');
+	canvas.hoverCursor = 'move';
     changeSelectableStatus(true);
+	islock = true;
 });
 
 $("#draw").click(function() {
@@ -362,12 +430,24 @@ $("#draw").click(function() {
     canvas.on('mouse:down', onMouseDown);
     canvas.on('mouse:move', onMouseMove);
     canvas.on('mouse:up', onMouseUp);
+	canvas.hoverCursor = 'pointer';
     changeSelectableStatus(false);
+	islock = true;
+});
+
+$("#selectboard").click(function() {
+    canvas.selection = false;
+    canvas.off('mouse:down');
+    canvas.off('mouse:move', onMouseMove);
+    canvas.off('mouse:up');
+	canvas.hoverCursor = 'move';
+    changeSelectableStatus(false);
+	islock = false;
 });
 
 function changeSelectableStatus(val) {
     canvas.forEachObject(function(obj) {
-        obj.selectable = val;
+		obj.selectable = val;
     })
     canvas.renderAll();
 }
@@ -384,7 +464,8 @@ function onMouseDown(o) {
         fill: 'transparent',
         stroke: 'red',
         strokeWidth: 3,
-        selectable: false
+        selectable: false,
+		objType: "BBox"
     });
     canvas.add(rectangle);
 }
@@ -411,9 +492,88 @@ function onMouseMove(o) {
     canvas.renderAll();
 };
 
+canvas.on('mouse:move', function(opt) {
+	var e = opt.e;
+	if (!islock && e.buttons == 1) {
+		canvas.viewportTransform[4] += e.clientX - this.lastPosX;
+		canvas.viewportTransform[5] += e.clientY - this.lastPosY;
+		canvas.renderAll();
+	}
+	this.lastPosX = e.clientX;
+	this.lastPosY = e.clientY;
+});
+
+canvas.on('mouse:wheel', function(opt) {
+	var delta = opt.e.deltaY * -1;
+	var zoom = canvas.getZoom();
+	zoom = zoom + delta/200;
+	if (zoom > 2) zoom = 2;
+	if (zoom < 0.01) zoom = 0.01;
+	setZoom(zoom);
+	opt.e.preventDefault();
+	opt.e.stopPropagation();
+})
+
 function onMouseUp(o) {
     rectangle.setCoords();
     isDown = false;
+	bind();
+	imgWidthfactor = boss.width / (boss.translateX * 2)
+	imgHeightfactor = boss.height / (boss.translateY * 2)
+	var minions = canvas.getObjects().filter(o => o["objType"] === "BBox");
+	minions.forEach(o => {
+		bbX = (o.translateX-(o.translateX-o.left)) * imgWidthfactor
+		bbY = (o.translateY-(o.translateY-o.top)) * imgHeightfactor
+		console.log( bbX +"    "+ bbY )
+		console.log( (o.width * imgWidthfactor)+"    "+ (o.height * imgHeightfactor) )
+		console.log("--------------------------")
+	});
 };
+
+function InitMinions() {	
+	boss.on('moving', updateMinions);
+	boss.on('rotating', updateMinions);
+	boss.on('scaling', updateMinions);
+	bind();
+}
+
+function updateMinions() {	
+	var minions = canvas.getObjects().filter(o => o["objType"] !== "Image");
+	minions.forEach(o => {
+		if (!o.relationship) {
+			return;
+		}
+		var relationship = o.relationship;
+		var newTransform = multiply(
+			boss.calcTransformMatrix(),
+			relationship
+		);
+		opt = fabric.util.qrDecompose(newTransform);
+		o.set({
+			flipX: false,
+			flipY: false,
+		});
+		o.setPositionByOrigin(
+			{ x: opt.translateX, y: opt.translateY },
+			'center',
+			'center'
+		);
+		o.set(opt);
+		o.setCoords();
+	});
+}
+
+function bind() {
+	var minions = canvas.getObjects().filter(o => o["objType"] !== "Image");
+	var bossTransform = boss.calcTransformMatrix();
+	var invertedBossTransform = invert(bossTransform);
+	minions.forEach(o => {
+		var desiredTransform = multiply(
+			invertedBossTransform,
+			o.calcTransformMatrix()
+		);
+		o.relationship = desiredTransform;
+	});
+}
 </script>
 </html>
