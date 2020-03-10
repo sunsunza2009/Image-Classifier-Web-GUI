@@ -31,7 +31,7 @@ def register():
 	if request.method == 'POST':
 		username = request.form['username']
 		email = request.form['email']
-		pwd = request.form['password']	
+		pwd = request.form['password']
 		res = db.register(username,email,pwd)	
 		if(res):
 			return render_template("login.html",user=username)
