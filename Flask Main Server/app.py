@@ -44,23 +44,6 @@ def project(id):
 def handle_exception(e):
     # now you're handling non-HTTP exceptions only
     return render_template("500_generic.html"), 500'''
-	
-
-'''@app.route("/settings")
-def settings():
-	if 'username' in session and session['permission'] == 1:
-		sess_user = user.getUser(session["username"])
-		if(not sess_user or (sess_user and sess_user[2] != session['permission'])):
-			session.pop('username', None)
-			session.pop('permission', None)
-			return redirect(url_for('AUTH.login'))
-		cur = get_db().cursor()
-		res = cur.execute("select * from users")
-		allnode = node.getAllNode()
-		report = node.getRoom_report()
-		return render_template("settings.html", sess=session, users=res, nodes=allnode, reports=report)
-	return redirect(url_for('index'))'''
-
 
 if __name__ == "__main__":
 	print(app.url_map)

@@ -150,6 +150,13 @@
 						'Your project has been deleted.',
 						'success'
 					)
+				})
+				.fail(function(data) {
+					Swal.fire(
+						'Fail!',
+						data["responseJSON"]["message"],
+						'error'
+					)
 				});
 			}
 		})

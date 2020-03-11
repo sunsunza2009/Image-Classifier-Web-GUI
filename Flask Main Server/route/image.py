@@ -7,7 +7,7 @@ import os
 app = Blueprint('IMAGE', __name__)
 db = Database()
 MAX_UPLOAD = 64 * 1024 * 1024
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jpe', 'bmp', 'tiff', 'tif'}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -19,7 +19,8 @@ def upload():
 		return jsonify({"result":"Fail","message":"Login is require"}), 400
 	id = request.form.get('id')
 	_class = request.form.get('class')
-	if(id != "" and id != None):
+	proj = int(id) in [d['proj_id'] for d in db.list_project(session["id"])]
+	if(proj):
 		file = request.files.get('file')
 		if file == None:
 			return jsonify({"result":"Fail","message":"file is require"}), 400
@@ -33,20 +34,30 @@ def upload():
 				os.makedirs(path)
 			file.seek(0)
 			file.save(os.path.join(path, filename))
-			db.new_image(session["id"],id,os.path.join(path, filename))
-			return jsonify({"result":"Success","message":"OK"})
+			imgid = db.new_image(session["id"],id,os.path.join(path, filename))
+			return jsonify({"result":"Success","message":"OK","id":imgid})
 		else:	
 			return jsonify({"result":"Fail","message":"this file is not allow"}), 400
 	else:
 		return jsonify({"result":"Fail","message":"id or class is require"}), 400
 
-@app.route('/rename', methods=['POST'])
+@app.route('/rename', methods=['GET'])
 def rename():
 	if 'username' not in session:
 		return jsonify({"result":"Fail","message":"Login is require"}), 400
 	id = request.args.get('id')
 	_class = request.args.get('class')
 	_oldclass = request.args.get('oldclass')
+	proj = int(id) in [d['proj_id'] for d in db.list_project(session["id"])]
+	if(proj):
+		path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_app.config['Image_FOLDER'], session['username'], id)
+		if os.path.exists(os.path.join(path, _oldclass)) and not os.path.exists(os.path.join(path, _class)):
+			os.rename(os.path.join(path, _oldclass), os.path.join(path, _class))
+			db.update_Class(_oldclass,_class,session["id"],id)
+			return jsonify({"result":"Success","message":"OK"})
+		else:
+			return jsonify({"result":"Fail","message":"This class is not exit or it already exit"}), 400
+	return jsonify({"result":"Fail","message":"id or class is require"}), 400
 
 @app.route('/delete', methods=['GET'])
 def delete():
@@ -55,8 +66,9 @@ def delete():
 	
 	id = request.args.get('id')
 	imgid = request.args.get('imgid')
-	if(id != "" and id != None and imgid != "" and imgid != None):
-		res = get_image(imgid,session["id"],id)
+	proj = int(id) in [d['proj_id'] for d in db.list_project(session["id"])]
+	if(proj and imgid != "" and imgid != None):
+		res = db.get_image(imgid,session["id"],id)
 		db.del_image(imgid,session["id"],id)
 		if os.path.exists(res["img_path"]):
 			os.remove(res["img_path"])

@@ -65,11 +65,15 @@ class Database:
 	def new_image(self,id,proj_id,path):
 		try:
 			proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
-			img = path not in [d['img_path'] for d in self.list_image(id,proj_id)]
+			lst_img = self.list_image(id,proj_id)
+			imgid = [d['img_id'] for d in lst_img]
+			imgpath = [d['img_path'] for d in lst_img]
+			img = path not in imgpath
 			if(proj and img):
 				self.cur.execute("INSERT INTO `image` (`img_path`,`proj_id`) VALUES (%s, %s)",(path,proj_id))
-				return True
-			return False
+				return self.cur.lastrowid
+			idx = imgpath.index(path)
+			return imgid[idx]
 		except:
 			return False
 
@@ -94,6 +98,14 @@ class Database:
 		if(proj):
 			self.cur.execute("SELECT * FROM `image` WHERE `img_id` = %s AND `proj_id` = %s",(img,proj_id))
 			return self.cur.fetchone()
+		else:
+			return False
+
+	def update_Class(self,oldclass,newclass,id,proj_id):
+		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
+		if(proj):
+			self.cur.execute("UPDATE image SET `img_path` = REPLACE(`img_path` , %s, %s) WHERE `img_path` LIKE (%s) AND `proj_id` = %s",(oldclass,newclass,"%"+oldclass+"%",proj_id))
+			return True
 		else:
 			return False
 

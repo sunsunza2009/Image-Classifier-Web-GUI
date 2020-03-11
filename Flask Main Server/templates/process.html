@@ -173,7 +173,7 @@
 			}
 			if(node["type"] != "checked"){
 				var fd = new FormData();
-				fd.append('id',  $('meta[name=id]').attr("content")); 
+				fd.append('id',  "{{id}}"); 
 				fd.append('class', node["parent"]); 
 				fd.append('file', node["original"]["file"]);
 				try {
@@ -186,6 +186,7 @@
 						success: function(response,status){ 
 							if(response != 0){ 
 								$('#jstree_demo_div').jstree(true).set_type(i, 'checked');
+								node["original"]["imgid"] = response["id"]
 							}else{ 
 								console.log("File not upload"); 
 							}
@@ -320,39 +321,63 @@ $('#renameTree').click(function () {
 	if(node["nodeType"] == "Class"){
 		ref.edit(sel);
 	}
-	
 });
-$('#delTree').click(function () {
+$('#jstree_demo_div').on('rename_node.jstree', function (e, obj) {
+	$.get( `{{url_for('IMAGE.rename',id=id)}}&class=${obj["text"]}&oldclass=${obj["old"]}`, function( data ) {
+		Swal.fire({
+			icon: 'success',
+			title: 'Success',
+			text: 'Rename Success',
+		})
+		location.reload();
+	})
+	.fail(function(data) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Fail',
+			text: data["responseJSON"]["message"],
+		})
+	});
+});
+$('#delTree').click(async function () {
 	var ref = $('#jstree_demo_div').jstree(true);
 	var sels = ref.get_selected();		
 	if(!sels.length) { return false; }
 	for(let sel of sels){
 		let node = ref.get_node(sel)["original"];	
 		if(node["nodeType"] == "file"){
-			ref.delete_node(sel);
+			await $.get( `{{url_for('IMAGE.delete',id=id)}}&imgid=${node["imgid"]}`, function( data ) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Success',
+					text: 'Rename Success',
+				})
+				ref.delete_node(sel);
+			})
+			.fail(function(data) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Fail',
+					text: data["responseJSON"]["message"],
+				})
+			});
 		}
 	}
 });
 $("#newData").click(function(){
-	$.ajax({ 
-		url: '{{url_for('DATASET.new',id=id)}}', 
-		type: 'GET',
-		success: function(response,status){ 
-			console.log(response)
-			if(response["result"] == 'Success'){ 
-				Swal.fire({
-					icon: 'success',
-					title: 'Success',
-					text: 'Create Dataset Success',
-				})
-			}else{ 
-				Swal.fire({
-					icon: 'error',
-					title: 'Fail',
-					text: 'Create Dataset Fail',
-				})
-			}
-		}
+	$.get( '{{url_for('DATASET.new',id=id)}}', function( data ) {
+		Swal.fire({
+			icon: 'success',
+			title: 'Success',
+			text: 'Create Dataset Success',
+		})
+	})
+	.fail(function(data) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Fail',
+			text: 'Create Dataset Fail',
+		})
 	});
 })
 </script>
