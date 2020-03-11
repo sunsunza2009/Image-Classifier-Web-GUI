@@ -1,4 +1,4 @@
-Object Detection Web GUI
+Image Classifier Web GUI
 ================
 
 A Flask Server for Create dataset, Training and Prediction

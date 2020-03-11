@@ -15,49 +15,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/smartwizard@4.4.1/dist/js/jquery.smartWizard.min.js" integrity="sha256-uSROG3lBu3YW4HUkG1YPq1wvjHsBDmc2pf9UQ73XxbA=" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/smartwizard@4.4.1/dist/css/smart_wizard_theme_arrows.min.css" integrity="sha256-ZTabZVgreT+WXpBPSbXKaS3QbQtW8yZz/cCsQWAgeyw=" crossorigin="anonymous">
-	<style type="text/css">
-		.file-upload-input{position:absolute;margin:0;padding:0;height:0%;outline:none;opacity:0;cursor:pointer}
-		.sticky {
-			position: -webkit-sticky; /* Safari */
-			position: sticky;top: 15%;
-		}	
-		td:nth-child(1):hover,td .btn:hover{cursor: pointer;}
-		.table{
-			background-color:#fff;
-			box-shadow:0px 2px 2px #aaa;
-		}
-		.hide-input {
-			position: absolute;
-			z-index: -1;
-			opacity: 0;
-		}
-		.btn span.fa-check,.btn.active span.fa-times {    			
-			opacity: 0;	
-			width: 0%;
-			height: 0%;		
-		}
-		.btn.active span.fa-check,.btn span.fa-times {				
-			opacity: 1;
-			width: auto;
-			height: auto;	
-		}
-		td .btn.active {
-			color:#fff !important;
-			background-color:#218838 !important;
-			border-color:#1e7e34 !important;
-			box-shadow: 0 0 0 .2rem rgba(72,180,97,.5) !important;
-		}
-		td .btn {
-			color:#fff !important;
-			background-color:#dc3545 !important;
-			border-color:#dc3545 !important;
-			box-shadow: 0 0 0 .2rem rgba(225,83,97,.5) !important;
-		}
-		.sw-theme-arrows>ul.step-anchor>li.clickable>a:hover {
-			color:#FFFFFF !important;
-			background:rgba(92, 184, 92, .5) !important;
-		}
-	</style>
+	<link rel="stylesheet" href="{{ url_for('static', filename='process.css') }}">
 </head>
 
 <body class="bg-light">
