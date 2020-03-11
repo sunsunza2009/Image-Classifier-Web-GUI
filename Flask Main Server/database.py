@@ -41,7 +41,7 @@ class Database:
 
 	def new_project(self,name,type,id):
 		try:
-			self.cur.execute("INSERT INTO `project` (`proj_name`,`proj_modelType`,`user_id`,`proj_class`) VALUES (%s, %s, %s, %s)",(name,type,id,"[]"))
+			self.cur.execute("INSERT INTO `project` (`proj_name`,`proj_modelType`,`user_id`) VALUES (%s, %s, %s)",(name,type,id))
 			return True
 		except:
 			return False
@@ -56,13 +56,11 @@ class Database:
 
 	def list_project(self,id):
 		self.cur.execute("SELECT *,COUNT(DISTINCT i.img_id) AS img_len FROM project p LEFT JOIN image i ON p.proj_id = i.proj_id WHERE p.user_id = %s GROUP BY p.proj_id ",id)
-		result = self.cur.fetchall()
-		return result
+		return self.cur.fetchall()
 
 	def get_project(self,id,proj_id):
 		self.cur.execute("SELECT * FROM `project` WHERE `user_id` = %s AND `proj_id` = %s",(id,proj_id))
-		result = self.cur.fetchone()
-		return result
+		return self.cur.fetchone()
 
 	def new_image(self,id,proj_id,path):
 		try:
@@ -79,22 +77,38 @@ class Database:
 		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
 		if(proj):
 			self.cur.execute("SELECT * FROM `image` WHERE `proj_id` = %s",proj_id)
-			result = self.cur.fetchall()
-			return result
+			return self.cur.fetchall()
+		else:
+			return False
+
+	def del_image(self,img,id,proj_id):
+		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
+		if(proj):
+			self.cur.execute("DELETE FROM `image` WHERE `img_id` = %s AND `proj_id` = %s",(img,proj_id))
+			return True
+		else:
+			return False
+
+	def get_image(self,img,id,proj_id):
+		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
+		if(proj):
+			self.cur.execute("SELECT * FROM `image` WHERE `img_id` = %s AND `proj_id` = %s",(img,proj_id))
+			return self.cur.fetchone()
 		else:
 			return False
 
 	def updateDataset(self,path,id,proj_id):
 		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
 		if(proj):
-			self.cur.execute("UPDATE `project` SET `proj_datasetPath` = %s WHERE `project`.`proj_id` = %s",(path,proj_id))
+			img = self.list_image(id,proj_id)
+			self.cur.execute("UPDATE `project` SET `proj_datasetDate` = CURDATE(),`proj_datasetImage` = %s, `proj_datasetPath` = %s WHERE `project`.`proj_id` = %s",(len(img),path,proj_id))
 			return True
 		else:
 			return False
 
 if __name__ == '__main__':
 	db = Database()
-	'''print(db.getUser("admin"))
+	print(db.getUser("admin"))
 	print(db.register("admin","admin@.com","admin"))
-	print(db.login("admin","admin"))'''
+	print(db.login("admin","admin"))
 	print(db.list_image(1,11))

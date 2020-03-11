@@ -16,10 +16,6 @@ app.register_blueprint(auth.app)
 app.register_blueprint(project.app, url_prefix="/api/private/project")
 app.register_blueprint(image.app, url_prefix="/api/private/image")
 app.register_blueprint(dataset.app, url_prefix="/api/private/dataset")
-'''app.register_blueprint(nodeApi.app, url_prefix="/api/node")
-app.register_blueprint(campus.api,url_prefix="/api/campus")
-app.register_blueprint(building.api,url_prefix="/api/building")
-app.register_blueprint(room.api,url_prefix="/api/room")'''
 
 def checkuser():
 	sess_user = db.getUser(session["username"])

@@ -130,8 +130,8 @@
 										<div class="dataset">
 											<div class="card">
 												<ul class="list-group list-group-flush">
-													<li class="list-group-item">Last Update <h4>1/1/2020</h4></li>
-													<li class="list-group-item">Image <h4>10/100</h4></li>
+													<li class="list-group-item">Last Update <h4>{{ proj.proj_datasetDate }}</h4></li>
+													<li class="list-group-item">Image <h4>{{ proj.proj_datasetImage }}</h4></li>
 												</ul>
 											</div>
 											<div class="row pt-3">
@@ -150,7 +150,6 @@
 											<div class="card">
 												<ul class="list-group list-group-flush">
 													<li class="list-group-item">Last Update <h4>1/1/2020</h4></li>
-													<li class="list-group-item">Image <h4>10/100</h4></li>
 												</ul>
 											</div>
 											<div class="row pt-3">
@@ -168,10 +167,10 @@
 										<div class="training">
 											<div class="card">
 												<ul class="list-group list-group-flush">
-													<li class="list-group-item">URL <h4>http://localhost/api/public/model/0001/predict</h4></li>
-													<li class="list-group-item">POST Data <h4>Image File</h4></li>
-													<li class="list-group-item">Respond <h4>JSON</h4></li>
-													<li class="list-group-item">API Key <h4>ABCDEFG012345</h4></li>												
+													<li class="list-group-item">URL <h4>/api/public/model/{{id}}/predict</h4></li>
+													<li class="list-group-item">POST Data <h4>file=Image File</h4></li>
+													<li class="list-group-item">Header <h4>apikey={{sess.key}}</h4></li>
+													<li class="list-group-item">Respond <h4>JSON</h4></li>																									
 												</ul>
 											</div>										
 										</div>

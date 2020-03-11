@@ -40,14 +40,26 @@ def upload():
 	else:
 		return jsonify({"result":"Fail","message":"id or class is require"}), 400
 
+@app.route('/rename', methods=['POST'])
+def rename():
+	if 'username' not in session:
+		return jsonify({"result":"Fail","message":"Login is require"}), 400
+	id = request.args.get('id')
+	_class = request.args.get('class')
+	_oldclass = request.args.get('oldclass')
+
 @app.route('/delete', methods=['GET'])
 def delete():
 	if 'username' not in session:
 		return jsonify({"result":"Fail","message":"Login is require"}), 400
 	
 	id = request.args.get('id')
-	if(id != "" and id != None):
-		db.del_project(id,session["id"])
+	imgid = request.args.get('imgid')
+	if(id != "" and id != None and imgid != "" and imgid != None):
+		res = get_image(imgid,session["id"],id)
+		db.del_image(imgid,session["id"],id)
+		if os.path.exists(res["img_path"]):
+			os.remove(res["img_path"])
 		return jsonify({"result":"Success","message":"OK"})
 	else:
 		return jsonify({"result":"Fail","message":"id is require"}), 400

@@ -2,3 +2,5 @@ __pycache__
 *.mwb
 *.bak
 File Storage
+*.model
+test.jpg
