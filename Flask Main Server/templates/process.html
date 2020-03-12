@@ -21,7 +21,7 @@
 <body class="bg-light">
 	<!-- Start NAV BAR -->
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
-		<a class="navbar-brand" href="#"><i class="fas fa-brain"></i></a>
+		<a class="navbar-brand" href="{{url_for('index')}}"><i class="fas fa-brain"></i></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -112,8 +112,19 @@
 											</div>
 											<div class="row pt-3">
 												<div class="col">
-													<button type="button" class="btn btn-primary" disabled>Start Training</button>
-													<button type="button" class="btn btn-primary" disabled>Download Model</button>
+													{% if proj.proj_datasetPath != None %}
+														<button type="button" class="btn btn-primary" id="request">Request Training</button>
+         												<button type="button" class="btn btn-primary" id="training">Start Training</button>
+													{% else %}
+														<button type="button" class="btn btn-primary" id="request" disabled>Request Training</button>
+														<button type="button" class="btn btn-primary" id="training" disabled>Start Training</button>
+													{% endif %}
+
+													{% if proj.proj_modelPath != None %}
+         												<a type="button" class="btn btn-primary" href="{{url_for('MODEL.download',id=id)}}">Download Model</a>
+													{% else %}
+														<button type="button" class="btn btn-primary" disabled>Download Model</button>
+													{% endif %}
 												</div>
 											</div>
 										</div>
@@ -128,9 +139,9 @@
 													<li class="list-group-item">URL <h4>/api/public/model/{{id}}/predict</h4></li>
 													<li class="list-group-item">POST Data <h4>file=Image File</h4></li>
 													<li class="list-group-item">Header <h4>apikey={{sess.key}}</h4></li>
-													<li class="list-group-item">Respond <h4>JSON</h4></li>																									
+													<li class="list-group-item">Respond <h4>JSON</h4></li>
 												</ul>
-											</div>										
+											</div>
 										</div>
 									</div>
 								</div>
@@ -144,9 +155,19 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script type="text/javascript">
+<script type="text/javascript">	
 	$(document).ready(function(){
 		$('#smartwizard').smartWizard({theme: 'arrows',anchorSettings: {enableAllAnchors: true}});
+		$.get( '{{url_for('IMAGE.list',id=id)}}', function( data ) {
+			readURL(data,true)
+		})
+		.fail(function(data) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Fail',
+				text: data["responseJSON"]["message"],
+			})
+		});
 	});
 
 	$('#upload').click(function(){
@@ -166,7 +187,7 @@
 		for(let i of node_info){
 			let node = $('#jstree_demo_div').jstree("get_node",i);
 			if(node["parent"] == "root"){
-				continue;				
+				continue;
 			}
 			if($("#upload").text() == "Start Upload"){
 				break;
@@ -210,18 +231,27 @@
 		}
 	}
 
-	function readURL(input) {
-		var ref = $('#jstree_demo_div').jstree(true),sel = "root";			
+	function readURL(input,ajax=false) {
+		var ref = $('#jstree_demo_div').jstree(true),sel = "root";
 		
 		for(let file of input["files"]) {
 			let path = file["webkitRelativePath"].split("/")
-			console.log(path);
 			if(!CheckClass(path[path.length-2])){
 				ref.create_node(sel, {'text' : path[path.length-2],"nodeType": "Class","id": path[path.length-2],'children' : []} );
-			}				
-			var childNode = { type: "unchecked", nodeType:"file",id:file["name"],text: file["name"], file: file };
-			$('#jstree_demo_div').jstree(true).create_node( path[path.length-2], childNode , "last");
-			$("#jstree_demo_div").jstree('open_node', path[path.length-2]);
+			}
+			if($('#jstree_demo_div').jstree("get_node",secure_filename(file["name"])) === false){
+				let nodeicon = "unchecked"
+				if(ajax){
+					nodeicon = "checked"
+				}
+				var childNode = { type: nodeicon, nodeType:"file",id:file["name"],text: file["name"], file: file };
+				if(ajax){
+					childNode["file"] = file["url"]
+					childNode["imgid"] = file["id"]
+				}
+				$('#jstree_demo_div').jstree(true).create_node( path[path.length-2], childNode , "last");
+				$("#jstree_demo_div").jstree('open_node', path[path.length-2]);
+			}
 		}
 	}
 
@@ -240,7 +270,7 @@ $(document).ready(function(){
 			"themes" : {
 				"responsive": true
 			},
-			'data' : [		   
+			'data' : [
 				{
 					'text' : 'Class',
 					"nodeType": "root",
@@ -267,11 +297,11 @@ $(document).ready(function(){
 				"valid_children" : []
 			}
 		},
-		"checkbox": {       
+		"checkbox": {
 			whole_node : false,
 			tie_selection : false
 		},
-		"plugins" : [ "wholerow", "dnd", "types", "search", "sort" ]
+		"plugins" : [ "wholerow", "types", "search", "sort" ]
 	});
 });
 $('#jstree_demo_div').on('move_node.jstree', function (e, data) {
@@ -282,7 +312,7 @@ $('#jstree_demo_div').on('move_node.jstree', function (e, data) {
     console.log("Old Parent");
 	console.log(oldparent);
 	console.log("Parent");
-	console.log(parent);	
+	console.log(parent);
 	console.log("Image");
 	console.log(image);
 });
@@ -294,9 +324,12 @@ $('#jstree_demo_div').on('select_node.jstree', function (e, data) {
 		$('#preview').attr('src', e.target.result);
 	};
 	
-	console.log(orginal);
 	if(orginal["nodeType"] == "file"){
-		reader.readAsDataURL(orginal["file"]);
+		if(typeof orginal["file"] === 'string'){
+			$('#preview').attr('src', orginal["file"]);
+		}else{
+			reader.readAsDataURL(orginal["file"]);
+		}
 		$('#jstree_demo_div').jstree(true).select_node([orginal["id"]]);
 	}	
 });
@@ -314,10 +347,10 @@ $('#clr').click(function () {
 });
 $('#renameTree').click(function () {
 	var ref = $('#jstree_demo_div').jstree(true);
-	var sel = ref.get_selected();		
+	var sel = ref.get_selected();
 	if(!sel.length) { return false; }
-	sel = sel[0];	
-	let node = ref.get_node(sel)["original"];	
+	sel = sel[0];
+	let node = ref.get_node(sel)["original"];
 	if(node["nodeType"] == "Class"){
 		ref.edit(sel);
 	}
@@ -341,16 +374,16 @@ $('#jstree_demo_div').on('rename_node.jstree', function (e, obj) {
 });
 $('#delTree').click(async function () {
 	var ref = $('#jstree_demo_div').jstree(true);
-	var sels = ref.get_selected();		
+	var sels = ref.get_selected();
 	if(!sels.length) { return false; }
 	for(let sel of sels){
-		let node = ref.get_node(sel)["original"];	
+		let node = ref.get_node(sel)["original"];
 		if(node["nodeType"] == "file"){
 			await $.get( `{{url_for('IMAGE.delete',id=id)}}&imgid=${node["imgid"]}`, function( data ) {
 				Swal.fire({
 					icon: 'success',
 					title: 'Success',
-					text: 'Rename Success',
+					text: 'Delete Success',
 				})
 				ref.delete_node(sel);
 			})
@@ -380,5 +413,55 @@ $("#newData").click(function(){
 		})
 	});
 })
+$("#training").click(function(){
+	$.get( '{{url_for('MODEL.train',id=id)}}', function( data ) {
+		Swal.fire({
+			icon: 'success',
+			title: 'Success',
+			text: 'Send data to training server Success',
+		})
+	})
+	.fail(function(data) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Fail',
+			text: 'Send data to training server Fail',
+		})
+	});
+})
+$("#request").click(function(){
+	$.get( '{{url_for('MODEL.req')}}', function( data ) {
+		Swal.fire({
+			icon: 'success',
+			title: 'Success',
+			text: 'Success, You have 60s to start.',
+		})
+	})
+	.fail(function(data) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Some User is currently in the training.',
+			text: ' Fail',
+		})
+	});
+})
+function secure_filename(str) {
+	str = str.normalize("NFKD")
+	str = str.split("/").join(" ")
+	str = str.split("\\").join(" ")
+	str = str.split(" ").join("_")
+	str = str.replace(new RegExp("[^A-Za-z0-9_.-]", 'g'), "")
+	str = strip(str,"._")
+	return str;
+}
+function strip(str, remove) {
+	while (str.length > 0 && remove.indexOf(str.charAt(0)) != -1) {
+		str = str.substr(1);
+	}
+	while (str.length > 0 && remove.indexOf(str.charAt(str.length - 1)) != -1) {
+		str = str.substr(0, str.length - 1);
+	}
+	return str;
+}
 </script>
 </html>

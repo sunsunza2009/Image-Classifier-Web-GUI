@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, session, request, redirect, url_for, render_template
+from flask import Blueprint, jsonify, session, request, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 from database import Database
 from flask import current_app
@@ -73,5 +73,32 @@ def delete():
 		if os.path.exists(res["img_path"]):
 			os.remove(res["img_path"])
 		return jsonify({"result":"Success","message":"OK"})
+	else:
+		return jsonify({"result":"Fail","message":"id is require"}), 400
+
+@app.route('/list', methods=['GET'])
+def list():
+	id = request.args.get('id')
+	proj = int(id) in [d['proj_id'] for d in db.list_project(session["id"])]
+	if(proj):
+		img_lst = db.list_image(session["id"],id)
+		tmp = []
+		for i in img_lst:
+			name = os.path.split(i["img_path"])[1]
+			pathSplit = i["img_path"].split(os.sep)[-2]+"/"+name
+			url = url_for("IMAGE.view",id=id,imgid=i["img_id"])
+			tmp.append({"id":i["img_id"],"name":name,"webkitRelativePath":pathSplit,"url":url})
+		return jsonify({"result":"Success","message":"OK","files":tmp})
+	else:
+		return jsonify({"result":"Fail","message":"id is require"}), 400
+
+@app.route('/view', methods=['GET'])
+def view():
+	id = request.args.get('id')
+	imgid = request.args.get('imgid')
+	proj = int(id) in [d['proj_id'] for d in db.list_project(session["id"])]
+	if(proj and imgid != "" and imgid != None):
+		res = db.get_image(imgid,session["id"],id)
+		return send_file(res["img_path"])
 	else:
 		return jsonify({"result":"Fail","message":"id is require"}), 400

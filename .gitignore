@@ -4,3 +4,5 @@ __pycache__
 File Storage
 *.model
 test.jpg
+data
+data.zip

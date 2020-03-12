@@ -1,6 +1,6 @@
 import json
 from flask import Flask, g, render_template, session, redirect, url_for, escape, request, jsonify
-from route import auth, project, image, dataset
+from route import auth, project, image, dataset, model
 from database import Database
 
 # Create app
@@ -12,10 +12,14 @@ app.config['UPLOAD_FOLDER'] = "File Storage"
 app.config['Image_FOLDER'] = "User_image"
 app.config['Dataset_FOLDER'] = "User_dataset"
 app.config['Model_FOLDER'] = "User_model"
+app.config['List_model'] = "http://127.0.0.1:3000/list"
+app.config['Request_Training'] = "http://127.0.0.1:3000/"
+app.config['Start_Training'] = "http://127.0.0.1:3000/data"
 app.register_blueprint(auth.app)
 app.register_blueprint(project.app, url_prefix="/api/private/project")
 app.register_blueprint(image.app, url_prefix="/api/private/image")
 app.register_blueprint(dataset.app, url_prefix="/api/private/dataset")
+app.register_blueprint(model.app, url_prefix="/api/private/model")
 
 def checkuser():
 	sess_user = db.getUser(session["username"])

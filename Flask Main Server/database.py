@@ -118,6 +118,14 @@ class Database:
 		else:
 			return False
 
+	def updateModel(self,path,id,proj_id):
+		proj = int(proj_id) in [d['proj_id'] for d in self.list_project(id)]
+		if(proj):
+			self.cur.execute("UPDATE `project` SET `proj_modelDate` = CURDATE(), `proj_modelPath` = %s WHERE `project`.`proj_id` = %s",(path,proj_id))
+			return True
+		else:
+			return False
+
 if __name__ == '__main__':
 	db = Database()
 	print(db.getUser("admin"))

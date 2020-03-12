@@ -17,7 +17,7 @@
 <body class="bg-light">
 	<!-- Start NAV BAR -->
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
-		<a class="navbar-brand" href="#"><i class="fas fa-brain"></i></a>
+		<a class="navbar-brand" href="{{url_for('index')}}"><i class="fas fa-brain"></i></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -78,6 +78,22 @@
 		</div>
 	</div>
 <script type="text/javascript">
+	model = {}
+	$(document).ready(function(){		
+		$.get( '{{url_for('MODEL.list')}}', function( data ) {
+			for(let i of data){
+				model[i[0]] = i[1]
+			}
+			console.log(model)
+		})
+		.fail(function(data) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Fail',
+				text: data["responseJSON"]["message"],
+			})
+		});
+	});
 	$("input[type='search']").bind("keyup",function() {
 		var searchString = $(this).val();
 		console.log(searchString);
@@ -118,10 +134,7 @@
 				title: 'Step 2',
 				text: 'Select project model',
 				input: 'select',
-				inputOptions: {
-					'MOBN': 'MobileNet',
-					'INCEP': 'Inception'
-				},
+				inputOptions: model,
 				inputPlaceholder: 'Select Model'
 			}
 		]).then((result) => {
