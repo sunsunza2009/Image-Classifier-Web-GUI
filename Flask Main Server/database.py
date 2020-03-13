@@ -126,6 +126,10 @@ class Database:
 		else:
 			return False
 
+	def get_proj_api(self,key,proj_id):
+		self.cur.execute("SELECT * FROM project p LEFT JOIN user u ON p.user_id = u.id WHERE u.api_key = %s AND p.proj_id = %s",(key,proj_id))
+		return self.cur.fetchone()
+
 if __name__ == '__main__':
 	db = Database()
 	print(db.getUser("admin"))

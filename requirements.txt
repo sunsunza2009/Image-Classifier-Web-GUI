@@ -1,0 +1,8 @@
+requests
+flask
+pymysql
+numpy
+tensorflow
+keras
+opencv-python
+waitress

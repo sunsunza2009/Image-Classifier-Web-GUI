@@ -136,10 +136,10 @@
 										<div class="training">
 											<div class="card">
 												<ul class="list-group list-group-flush">
-													<li class="list-group-item">URL <h4>/api/public/model/{{id}}/predict</h4></li>
+													<li class="list-group-item">URL <h4>{{url_for('PREDICT.predict',id=id,apikey=sess.key)}}</h4></li>
 													<li class="list-group-item">POST Data <h4>file=Image File</h4></li>
-													<li class="list-group-item">Header <h4>apikey={{sess.key}}</h4></li>
-													<li class="list-group-item">Respond <h4>JSON</h4></li>
+													<li class="list-group-item">Simple Json Respond 
+													<h4>[{"Class": "Name","probability": 100}]</h4></li>
 												</ul>
 											</div>
 										</div>

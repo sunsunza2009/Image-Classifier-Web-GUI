@@ -1,6 +1,6 @@
 import json
 from flask import Flask, g, render_template, session, redirect, url_for, escape, request, jsonify
-from route import auth, project, image, dataset, model
+from route import auth, project, image, dataset, model, predict
 from database import Database
 
 # Create app
@@ -20,6 +20,7 @@ app.register_blueprint(project.app, url_prefix="/api/private/project")
 app.register_blueprint(image.app, url_prefix="/api/private/image")
 app.register_blueprint(dataset.app, url_prefix="/api/private/dataset")
 app.register_blueprint(model.app, url_prefix="/api/private/model")
+app.register_blueprint(predict.app, url_prefix="/api")
 
 def checkuser():
 	sess_user = db.getUser(session["username"])
@@ -51,4 +52,4 @@ def handle_exception(e):
 
 if __name__ == "__main__":
 	print(app.url_map)
-	app.run()
+	app.run(host="0.0.0.0")
